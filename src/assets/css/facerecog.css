@@ -1,0 +1,501 @@
+.facerecog-container {
+  display: flex;
+  position: absolute;
+  flex-direction: column;
+  z-index: 10;
+  width: 610px;
+  height: 72vh;
+  border-radius: 5px;
+  background-color: rgba(235, 232, 232, 1);
+  align-items: center;
+  padding: 20px;
+  box-sizing: border-box;
+
+  /* Dashed border pattern */
+  background-image:
+    repeating-linear-gradient(
+      90deg,
+      #000000,
+      #000000 25px,
+      transparent 25px,
+      transparent 55px
+    ),
+    repeating-linear-gradient(
+      180deg,
+      #000000,
+      #000000 25px,
+      transparent 25px,
+      transparent 55px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      #000000,
+      #000000 25px,
+      transparent 25px,
+      transparent 55px
+    ),
+    repeating-linear-gradient(
+      180deg,
+      #000000,
+      #000000 25px,
+      transparent 25px,
+      transparent 55px
+    );
+
+  background-position:
+    left top,
+    right top,
+    left bottom,
+    left top;
+
+  background-repeat: repeat-x, repeat-y, repeat-x, repeat-y;
+  background-size:
+    100% 5px,
+    5px 100%,
+    100% 5px,
+    5px 100%;
+
+  background-color: rgba(235, 232, 232, 1);
+  background-blend-mode: normal;
+}
+
+.camera-wrapper {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  margin-top: 20px;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.camera-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  transform: scaleX(-1); /* Mirror for selfie view */
+}
+
+.camera-scanner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 4px dashed #333;
+  pointer-events: none;
+  box-sizing: border-box;
+  z-index: 2;
+}
+
+/* Scan line animation */
+.camera-scanner::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, transparent, #000000, transparent);
+  animation: scan 2s linear infinite;
+  top: 0;
+  left: 0;
+  z-index: 3;
+}
+
+@keyframes scan {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(290px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.loading-overlay,
+.error-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  z-index: 5;
+  text-align: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.loading-overlay p {
+  color: #333;
+  font-weight: bold;
+}
+
+.error-overlay p {
+  color: red;
+  margin-bottom: 10px;
+}
+
+.retry-button {
+  padding: 8px 16px;
+  background-color: black;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.retry-button:hover {
+  transform: scale(1.05);
+  background-color: #333;
+}
+
+/* Face detected ring - perfectly centered */
+.face-detected-ring {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.progress-ring {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.progress-ring__bg {
+  stroke: rgba(255, 255, 255, 0.5);
+  stroke-dasharray: 8 8;
+  filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.3));
+}
+
+.progress-ring__progress {
+  transition: stroke-dashoffset 0.1s linear;
+  animation: glow 1.5s infinite;
+  stroke-linecap: round;
+}
+
+@keyframes glow {
+  0% {
+    filter: drop-shadow(0 0 5px rgba(76, 175, 80, 0.5));
+  }
+  50% {
+    filter: drop-shadow(0 0 15px rgba(76, 175, 80, 0.8));
+  }
+  100% {
+    filter: drop-shadow(0 0 5px rgba(76, 175, 80, 0.5));
+  }
+}
+
+.progress-ring__dot {
+  animation: pulse 1s infinite;
+  transform-origin: center;
+}
+
+@keyframes pulse {
+  0% {
+    r: 10;
+    opacity: 0.7;
+  }
+  50% {
+    r: 14;
+    opacity: 1;
+  }
+  100% {
+    r: 10;
+    opacity: 0.7;
+  }
+}
+
+.note {
+  width: 100%;
+  margin-top: 30px;
+  text-align: center;
+  padding: 0 20px;
+}
+
+.note h5 {
+  font-size: 18px;
+  line-height: 1.5;
+  margin: 0;
+  font-weight: normal;
+}
+
+.note h5 strong {
+  color: black;
+  font-weight: bold;
+}
+
+.note h5 span {
+  color: red;
+  font-weight: normal;
+}
+
+.detection-status {
+  margin: 15px 0;
+  text-align: center;
+  min-height: 30px;
+}
+
+.status-text {
+  font-size: 16px;
+  color: #666;
+  animation: blink 1.5s infinite;
+  font-weight: 500;
+}
+
+.status-text.success {
+  color: #4caf50;
+  animation: none;
+  font-weight: bold;
+}
+
+@keyframes blink {
+  0% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}
+
+.close-button {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  width: 100%;
+  margin-top: auto;
+  margin-bottom: 20px;
+  padding-right: 10px;
+}
+
+.facerecog-button-close {
+  height: 40px;
+  width: 150px;
+  border: 5px solid black;
+  box-shadow: 5px 9px 0px 0px black;
+  transition: all 0.3s ease;
+  font-weight: 1000;
+  font-size: 20px;
+  background-color: white;
+  cursor: pointer;
+  border-radius: 0;
+}
+
+.facerecog-button-close:hover {
+  transform: scale(1.03);
+  box-shadow: 8px 12px 0px 0px black;
+  opacity: 0.9;
+}
+
+.facerecog-button-close:active {
+  transform: scale(0.98);
+  box-shadow: 3px 5px 0px 0px black;
+}
+
+/* Responsive adjustments */
+@media (max-width: 650px) {
+  .facerecog-container {
+    width: 90vw;
+    height: 80vh;
+  }
+
+  .camera-wrapper {
+    width: 250px;
+    height: 250px;
+  }
+
+  .note h5 {
+    font-size: 16px;
+  }
+}
+/* Confidence indicator */
+.confidence-indicator {
+  position: absolute;
+  bottom: -40px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.confidence-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 5px;
+}
+
+.confidence-dots .dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.confidence-dots .dot.active {
+  background-color: #4caf50;
+  transform: scale(1.2);
+  box-shadow: 0 0 10px #4caf50;
+}
+
+.confidence-text {
+  font-size: 14px;
+  color: #333;
+  font-weight: 500;
+  text-shadow: 0 0 5px white;
+}
+/* Guidance message with progress bar */
+.guidance-message {
+  position: absolute;
+  bottom: -70px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.guidance-message p {
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  display: inline-block;
+  font-size: 14px;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.progress-bar-container {
+  width: 200px;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+  margin: 0 auto;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.progress-bar-fill {
+  height: 100%;
+  transition: width 0.2s ease;
+}
+
+/* Face detected ring */
+.face-detected-ring {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.progress-ring {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.progress-ring__bg {
+  stroke: rgba(255, 255, 255, 0.5);
+  stroke-dasharray: 8 8;
+}
+
+.progress-ring__progress {
+  transition: stroke-dashoffset 0.1s linear;
+  animation: glow 1.5s infinite;
+  stroke-linecap: round;
+}
+
+@keyframes glow {
+  0% {
+    filter: drop-shadow(0 0 5px rgba(76, 175, 80, 0.5));
+  }
+  50% {
+    filter: drop-shadow(0 0 15px rgba(76, 175, 80, 0.8));
+  }
+  100% {
+    filter: drop-shadow(0 0 5px rgba(76, 175, 80, 0.5));
+  }
+}
+.detection-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 15;
+  transform: scaleX(-1); /* Match video mirroring */
+}
+
+.guidance-message {
+  position: absolute;
+  bottom: -70px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.guidance-message p {
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  display: inline-block;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.progress-bar-container {
+  width: 200px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 2px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: #4caf50;
+  transition: width 0.2s ease;
+}

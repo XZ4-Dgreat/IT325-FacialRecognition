@@ -1,0 +1,48 @@
+@font-face {
+  font-family: Poppins;
+  src: url("../src/assets/fonts/Poppins-Regular.ttf");
+}
+@font-face {
+  font-family: Anek-Devanagari;
+  src: url("../src/assets/fonts/AnekDevanagari-Regular.ttf");
+}
+@font-face {
+  font-family: Jomhuria;
+  src: url("../src/assets/fonts/Jomhuria-Regular.ttf");
+}
+@theme {
+  --color-navbar: #404040;
+  --color-navbar-border: #1e1e1e;
+  --font-poppins: Poppins, "sans-serif";
+  --font-anek: Anek, "sans-serif";
+  --font-jomhuria: Jomhuria, "sans-serif";
+}
+
+body {
+  background-color: rgba(235, 232, 232, 1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family:
+    source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+}
